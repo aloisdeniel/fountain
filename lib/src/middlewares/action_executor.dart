@@ -6,7 +6,7 @@ import '../context.dart';
 
 class ApplicationActionNotExecutableException implements Exception {}
 
-typedef TState ApplicationStateUpdater<TState>(TState state);
+typedef ApplicationStateUpdater<TState> = TState Function(TState state);
 
 /// An action is a portion of logic that will alterate the current
 /// state of the application.
@@ -70,14 +70,12 @@ class ApplicationActionExecutor<TState> extends ApplicationMiddleware<TState> {
         if (!action.canExecute(context.state)) {
           throw ApplicationActionNotExecutableException();
         }
+        await for (final event in action(context)) {
+          yield event(context.state);
+        }
       } catch (e, st) {
-        try {
-          await for (final event
-              in action.failed(context, initialState, e, st)) {
-            yield event(context.state);
-          }
-        } catch (e, st) {
-          print('Unexpected error: $e, $st');
+        await for (final event in action.failed(context, initialState, e, st)) {
+          yield event(context.state);
         }
       }
     }
