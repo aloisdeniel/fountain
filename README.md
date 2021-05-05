@@ -8,15 +8,9 @@ The modular state management solution for flutter.
 
 ## Quickstart
 
+The global logical state of our application :
+
 ```dart
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:fountain/fountain.dart';
-
-  runApp(MyApp());
-}
-
 class CounterState {
   factory CounterState.initial() => const CounterState(0, 10);
   const CounterState(this.count, this.max);
@@ -24,7 +18,11 @@ class CounterState {
   final int max;
   bool get isMax => count >= max;
 }
+```
 
+The available actions that alterate the logical state of the application :
+
+```dart
 class AddAction extends ApplicationAction<CounterState> {
   const AddAction(this.value);
   final int value;
@@ -64,23 +62,11 @@ class LoadAction extends ApplicationAction<CounterState> {
     yield (state) => CounterState(min(count, state.max), state.max);
   }
 }
+```
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ApplicationProvider(
-      initialState: (context) => CounterState.initial(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(),
-      ),
-    );
-  }
-}
+The view that subscribes to the state changes and dispatches actions :
 
+```dart
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
@@ -131,6 +117,26 @@ class MyHomePage extends StatelessWidget {
             child: Icon(Icons.add),
           );
         },
+      ),
+    );
+  }
+}
+```
+
+The state initialization :
+
+```dart
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ApplicationProvider(
+      initialState: (context) => CounterState.initial(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(),
       ),
     );
   }
