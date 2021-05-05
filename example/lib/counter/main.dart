@@ -23,22 +23,26 @@ class CounterState {
 }
 
 class AddAction extends ApplicationAction<CounterState> {
+  const AddAction(this.value);
+
+  final int value;
+
   @override
   Stream<ApplicationStateUpdater<CounterState>> call(
     ApplicationContext<CounterState> context,
   ) async* {
-    yield (state) => CounterState(min(state.count + 1, state.max), state.max);
+    yield (state) =>
+        CounterState(min(state.count + value, state.max), state.max);
   }
 }
 
-class ResetAction extends ApplicationAction<CounterState> {
-  @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
-  ) async* {
+/// A function can also be used when no argument is required.
+final resetAction = ApplicationAction<CounterState>.function(
+  'reset',
+  (context) async* {
     yield (state) => CounterState(0, state.max);
-  }
-}
+  },
+);
 
 class MyApp extends StatelessWidget {
   @override
@@ -96,7 +100,7 @@ class MyHomePage extends StatelessWidget {
           if (isMax) {
             return FloatingActionButton(
               /// The action is executed in the [ApplicationContext].
-              onPressed: () => context.dispatch<CounterState>(ResetAction()),
+              onPressed: () => context.dispatch<CounterState>(resetAction),
               tooltip: 'Reset',
               child: Icon(Icons.delete),
             );
@@ -104,7 +108,7 @@ class MyHomePage extends StatelessWidget {
 
           return FloatingActionButton(
             /// The action is executed in the [ApplicationContext].
-            onPressed: () => context.dispatch<CounterState>(AddAction()),
+            onPressed: () => context.dispatch<CounterState>(const AddAction(1)),
             tooltip: 'Increment',
             child: Icon(Icons.add),
           );

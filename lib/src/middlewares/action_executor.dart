@@ -22,6 +22,18 @@ abstract class ApplicationAction<TState> extends ApplicationEvent<TState> {
   /// Creates a new action.
   const ApplicationAction();
 
+  /// Creates a new action from a [call] function.
+  ///
+  /// The [id] identifies this particular action type.
+  ///
+  /// Inheriting from [ApplicationAction] is another way to define an action.
+  const factory ApplicationAction.function(
+    String id,
+    ApplicationFunctionCall<TState> call, {
+    ApplicationFunctionCanExecute<TState>? canExecute,
+    ApplicationFunctionFailed<TState>? failed,
+  }) = FunctionApplicationAction;
+
   /// An action execution will update the [context]'s state by producing a stream of updates.
   ///
   /// The easier way to implement such a method is by using `async *` generators.
@@ -40,15 +52,87 @@ abstract class ApplicationAction<TState> extends ApplicationEvent<TState> {
     TState initialState,
     dynamic error,
     StackTrace stackTrace,
+  ) =>
+      defaultFailed<TState>(context, initialState, error, stackTrace);
+
+  static Stream<ApplicationStateUpdater<TState>> defaultFailed<TState>(
+    ApplicationContext<TState> context,
+    TState initialState,
+    dynamic error,
+    StackTrace stackTrace,
   ) {
-    Logger.root.severe('An action "$this" failed', error, stackTrace);
+    Logger.root.severe('An action failed', error, stackTrace);
     return Stream<ApplicationStateUpdater<TState>>.empty();
   }
 
   /// Allows to block execution if the state isn't valid.
   ///
   /// Defaults to always `true`.
-  bool canExecute(TState state) => true;
+  bool canExecute(TState state) => defaultCanExecute(state);
+
+  static bool defaultCanExecute<TState>(TState state) => true;
+}
+
+typedef Stream<ApplicationStateUpdater<TState>> ApplicationFunctionCall<TState>(
+  ApplicationContext<TState> context,
+);
+
+typedef Stream<ApplicationStateUpdater<TState>> ApplicationFunctionFailed<
+    TState>(
+  ApplicationContext<TState> context,
+  TState initialState,
+  dynamic error,
+  StackTrace stackTrace,
+);
+
+typedef bool ApplicationFunctionCanExecute<TState>(TState state);
+
+class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
+  /// Creates a new action.
+  const FunctionApplicationAction(
+    this.id,
+    this._call, {
+    ApplicationFunctionCanExecute<TState>? canExecute,
+    ApplicationFunctionFailed<TState>? failed,
+  })  : this._failed = failed,
+        this._canExecute = canExecute;
+
+  final String id;
+  final ApplicationFunctionCall<TState> _call;
+  final ApplicationFunctionCanExecute<TState>? _canExecute;
+  final ApplicationFunctionFailed<TState>? _failed;
+
+  @override
+  Stream<ApplicationStateUpdater<TState>> call(
+    ApplicationContext<TState> context,
+  ) =>
+      _call(context);
+
+  @override
+  Stream<ApplicationStateUpdater<TState>> failed(
+    ApplicationContext<TState> context,
+    TState initialState,
+    dynamic error,
+    StackTrace stackTrace,
+  ) {
+    if (_failed != null) {
+      return ApplicationAction.defaultFailed<TState>(
+        context,
+        initialState,
+        error,
+        stackTrace,
+      );
+    }
+    return _failed!(context, initialState, error, stackTrace);
+  }
+
+  @override
+  bool canExecute(TState state) {
+    if (_failed != null) {
+      return ApplicationAction.defaultCanExecute<TState>(state);
+    }
+    return _canExecute!(state);
+  }
 }
 
 /// A middleware that executes all the received actions.

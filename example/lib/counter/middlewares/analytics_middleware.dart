@@ -1,4 +1,5 @@
 import 'package:fountain/fountain.dart';
+import 'package:fountain/middlewares.dart';
 
 import '../main.dart';
 
@@ -22,8 +23,8 @@ class Analytics extends ApplicationMiddleware<CounterState> {
         log('add', {
           'newCount': state.count.toString(),
         });
-      } else if (event is ResetAction) {
-        log('add', {});
+      } else if (event is FunctionApplicationAction<CounterState>) {
+        log(event.id, {});
       }
     }
   }
