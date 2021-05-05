@@ -2,6 +2,10 @@
 
 The modular state management solution for flutter.
 
+* *Easy debugging* : each event is predictable and goes into a single pipeline
+* *Centralized state* : solid state validation
+* *Power of async generators* : writing asynchronous code is easy thanks to Dart generators
+
 ## Quickstart
 
 ```dart
@@ -140,7 +144,9 @@ By default, the framework includes a `ApplicationActionExecutor` middleware that
 
 The framework also includes an `ApplicationLogger` middleware that logs all actions and state updates.
 
-##  Inspired by
+##  About
+
+### Inspired by
 
 This project stands on the shoulders of giants, with the intention of reducing boilerplate, being minimalist and simple at its core.
 
@@ -148,3 +154,9 @@ This project stands on the shoulders of giants, with the intention of reducing b
 * [Express](https://expressjs.com/) | [Koa](https://koajs.com/) for their composability and modularity thanks to middlewares.
 * [Bloc](https://pub.dev/packages/bloc) for its use of Streams.
 * [Provider](https://pub.dev/documentation/provider/latest/provider/SelectContext.html) for its `select` method.
+
+### How is it different from other popular solutions ?
+
+* [Provider](https://pub.dev/packages/provider) : Fountain is a lot more opiniated than Provider, and thus Provider is a more general purpose tool. It is often used in combination with a `ChangeNotifier` to create a simple solution.
+* [Redux](https://pub.dev/packages/flutter_redux) : Fountain has the same overall philosophy than Redux with `Thunks` but brings less boilerplate when dealing with asynchronous with `ApplicationAction`s logic by using `Stream`s. Fountain also brings the middleware concept.
+* [Bloc](https://pub.dev/packages/flutter_bloc) : Fountain use a global state instead of various `Blocs`. We believe it is important since there's a lot of areas which need to be aware of another part of your app logic. With a global state, each state update can be verified so that it does not break another part of the application.
