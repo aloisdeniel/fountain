@@ -1,4 +1,4 @@
-![logo](images/logo.png)
+![logo](https://github.com/aloisdeniel/fountain/raw/main/images/logo.png)
 
 The modular state management solution for flutter.
 
@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
 
 ## Core concepts
 
-![schema](images/schema.png)
+![schema](https://github.com/aloisdeniel/fountain/raw/main/images/schema.png)
 
 ### ApplicationContext<State>
 
@@ -169,7 +169,7 @@ The events are inputs for middlewares. They can describe a user action, or a sys
 
 ### Actions
 
-By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationActions` which are then invokes directly to produce new states.
+By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationActions` which are then invoked directly to produce new states.
 
 ### Logger
 
@@ -185,13 +185,13 @@ Fountain is not so new to me, I've used this approach for a longtime now. Centra
 
 This project stands on the shoulders of giants, with the intention of reducing boilerplate, being minimalist and simple at its core.
 
-* [Redux](https://pub.dev/packages/redux) for the functional update cycle and general principles with the purpose of having less boilerplate by being more opiniated.
+* [Redux](https://pub.dev/packages/redux) for the functional update cycle and general principles, with the purpose of having less boilerplate by being a bit more opiniated.
 * [Express](https://expressjs.com/) | [Koa](https://koajs.com/) for their composability and modularity thanks to middlewares.
 * [Bloc](https://pub.dev/packages/bloc) for its use of Streams.
 * [Provider](https://pub.dev/documentation/provider/latest/provider/SelectContext.html) for its `select` method.
 
 ### How is it different from other popular solutions ?
 
-* [Provider](https://pub.dev/packages/provider) : Fountain is a lot more opiniated than Provider, and thus Provider is a more general purpose tool. It is often used in combination with a `ChangeNotifier` to create a simple solution.
-* [Redux](https://pub.dev/packages/flutter_redux) : Fountain has the same overall philosophy than Redux with `Thunks` but brings less boilerplate when dealing with asynchronous with `ApplicationAction`s logic by using `Stream`s. Fountain also brings the middleware concept.
-* [Bloc](https://pub.dev/packages/flutter_bloc) : Fountain use a global state instead of various `Blocs`. We believe it is important since there's a lot of areas which need to be aware of another part of your app logic. With a global state, each state update can be verified so that it does not break another part of the application.
+* [Provider](https://pub.dev/packages/provider) : Fountain is more opiniated than Provider, and thus Provider is a more general purpose tool. Provider is often used in combination with a `ChangeNotifier` to create a simple state management solution.
+* [Redux](https://pub.dev/packages/flutter_redux) : Fountain has the same overall philosophy than Redux with `Thunks` but brings less boilerplate when dealing with asynchronous logic with `ApplicationAction`s logic by using `Stream`s. Fountain also brings the middleware concepts.
+* [Bloc](https://pub.dev/packages/flutter_bloc) : Fountain use a global state instead of various `Blocs`. We believe it is important since there's a lot of areas which need to be aware of another part of your app logic. This makes also persistence, testability easier to deal with.

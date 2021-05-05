@@ -1,3 +1,11 @@
-## [0.0.1] - TODO: Add release date.
+## [0.1.2-beta] 
 
-* TODO: Describe initial release.
+* Improved documentation.
+
+## [0.1.1-beta] 
+
+* Fixed image urls in documentation.
+
+## [0.1.0-beta] 
+
+* Initial release.

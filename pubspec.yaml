@@ -1,14 +1,14 @@
 name: fountain
 description: A new Flutter package project.
-version: 0.1.0
-homepage:
+version: 0.1.2-beta
+homepage: https://github.com/aloisdeniel/fountain
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
   flutter: ">=2.0.0"
 
 dependencies:
-  logging:
+  logging: ^1.0.1
   flutter:
     sdk: flutter
 
