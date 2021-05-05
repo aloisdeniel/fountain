@@ -199,7 +199,7 @@ class RefreshAction extends ApplicationAction<MyApp> {
 }
 ```
 
-> Note that the action aren't yielding states directly, but `ApplicationStateUpdater`s. This is insists on the fact the the initial state may have changed during the action execution, and must be taken into account when updated.
+> Note that the actions aren't yielding states directly, but `ApplicationStateUpdater`s. This is to insist on the fact the the initial state may have changed during the action execution, and therefore, it must be taken into account when updated.
 
 
 ### Logger
