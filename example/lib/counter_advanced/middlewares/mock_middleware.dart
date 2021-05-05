@@ -1,6 +1,5 @@
+import 'package:example/counter_advanced/state/state.dart';
 import 'package:fountain/fountain.dart';
-
-import '../main.dart';
 
 enum Mock {
   min,

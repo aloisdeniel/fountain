@@ -115,7 +115,7 @@ class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
     dynamic error,
     StackTrace stackTrace,
   ) {
-    if (_failed != null) {
+    if (_failed == null) {
       return ApplicationAction.defaultFailed<TState>(
         context,
         initialState,
@@ -128,10 +128,15 @@ class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
 
   @override
   bool canExecute(TState state) {
-    if (_failed != null) {
+    if (_failed == null) {
       return ApplicationAction.defaultCanExecute<TState>(state);
     }
     return _canExecute!(state);
+  }
+
+  @override
+  String toString() {
+    return id;
   }
 }
 

@@ -26,11 +26,13 @@ class CounterState {
 }
 
 class AddAction extends ApplicationAction<CounterState> {
+  const AddAction(this.value);
+  final int value;
   @override
   Stream<ApplicationStateUpdater<CounterState>> call(
     ApplicationContext<CounterState> context,
   ) async* {
-    yield (state) => CounterState(min(state.count + 1, state.max), state.max);
+    yield (state) => CounterState(min(state.count + value, state.max), state.max);
   }
 }
 
@@ -57,7 +59,7 @@ class LoadAction extends ApplicationAction<CounterState> {
   Stream<ApplicationStateUpdater<CounterState>> call(
     ApplicationContext<CounterState> context,
   ) async* {
-    final content await File(_cachePath).readAsString();
+    final content = await File(_cachePath).readAsString();
     final count = int.parse(content);
     yield (state) => CounterState(min(count, state.max), state.max);
   }
@@ -97,7 +99,7 @@ class MyHomePage extends StatelessWidget {
             ),
             Builder(
               builder: (context) {
-                /// This widget will be rebuilt each time the count value changes
+                /// This widget will be rebuilt each time the `count` value changes
                 final count =
                     context.select((CounterState state) => state.count);
                 return Text(
@@ -111,6 +113,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) {
+          /// This widget will be rebuilt each time the `isMax` value changes
           final isMax = context.select((CounterState state) => state.isMax);
           if (isMax) {
             return FloatingActionButton(
@@ -123,7 +126,7 @@ class MyHomePage extends StatelessWidget {
 
           return FloatingActionButton(
             /// The action is executed in the [ApplicationContext].
-            onPressed: () => context.dispatch<CounterState>(AddAction()),
+            onPressed: () => context.dispatch<CounterState>(AddAction(1)),
             tooltip: 'Increment',
             child: Icon(Icons.add),
           );
@@ -142,7 +145,9 @@ class MyHomePage extends StatelessWidget {
 
 The application context maintains a unique global logical immutable state for the application.
 
-The state if provided to the widget tree with the `ApplicationProvider`. The widgets can observe a property of the state with the `select` extension method. They can also dispatch events into middlewares with the `dispatch` extension methods.
+The context also contains all the middlewares that will process the dispatched event.
+
+The application context is provided to the widget tree from an `ApplicationProvider` so that any descendent widget can observe a property of the state with the `select` extension method. It can also dispatch events into the middlewares with the `dispatch` extension methods.
 
 ### ApplicationMiddleware
 
@@ -154,7 +159,7 @@ They are composable by nature which means that each middleware can wrap another 
 
 The events are inputs for middlewares. They can describe a user action, or a system event for exemple. They are processed by the middlewares which can produce new application states.
 
-## Included
+## Included middlewares
 
 ### Actions
 
@@ -165,6 +170,10 @@ By default, the framework includes a `ApplicationActionExecutor` middleware that
 The framework also includes an `ApplicationLogger` middleware that logs all actions and state updates.
 
 ##  About
+
+### Wait ... yet another state management solution for Flutter ?
+
+Fountain is not so new to me, I've used this approach for a longtime now. Centralizing it as an opensource library makes a lot of sense to create a standard for a all of my personal and professional projects.
 
 ### Inspired by
 

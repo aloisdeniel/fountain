@@ -1,68 +1,7 @@
-import 'dart:math';
-
+import 'package:example/counter_advanced/state/actions.dart';
+import 'package:example/counter_advanced/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:fountain/fountain.dart';
-import 'package:fountain/middlewares.dart';
-import 'package:logging/logging.dart';
-
-void main() {
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    print('${record.message}');
-  });
-
-  runApp(MyApp());
-}
-
-class CounterState {
-  factory CounterState.initial() => const CounterState(0, 10);
-  const CounterState(this.count, this.max);
-  final int count;
-  final int max;
-  bool get isMax => count >= max;
-}
-
-class AddAction extends ApplicationAction<CounterState> {
-  const AddAction(this.value);
-
-  final int value;
-
-  @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
-  ) async* {
-    yield (state) =>
-        CounterState(min(state.count + value, state.max), state.max);
-  }
-}
-
-/// A function can also be used when no argument is required.
-final resetAction = ApplicationAction<CounterState>.function(
-  'reset',
-  (context) async* {
-    yield (state) => CounterState(0, state.max);
-  },
-);
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ApplicationProvider(
-      initialState: (context) => CounterState.initial(),
-      middlewares: <ApplicationMiddleware<CounterState>>[
-        ApplicationLogger<CounterState>(),
-        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(),
-      ),
-    );
-  }
-}
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);

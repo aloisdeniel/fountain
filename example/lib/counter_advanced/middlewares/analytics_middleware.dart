@@ -1,7 +1,7 @@
+import 'package:example/counter_advanced/state/actions.dart';
+import 'package:example/counter_advanced/state/state.dart';
 import 'package:fountain/fountain.dart';
 import 'package:fountain/middlewares.dart';
-
-import '../main.dart';
 
 /// This is an example middleware that logs actions to a a virtual analytics provider.
 class Analytics extends ApplicationMiddleware<CounterState> {
@@ -19,6 +19,7 @@ class Analytics extends ApplicationMiddleware<CounterState> {
     ApplicationNextMiddleware<CounterState> next,
   ) async* {
     await for (final state in next(context, event)) {
+      yield state;
       if (event is AddAction) {
         log('add', {
           'newCount': state.count.toString(),
