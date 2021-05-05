@@ -169,7 +169,38 @@ The events are inputs for middlewares. They can describe a user action, or a sys
 
 ### Actions
 
-By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationActions` which are then invoked directly to produce new states.
+By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationAction`s which are then invoked directly to produce new states.
+
+#### Defining an action 
+
+To create custom actions, inherits from `ApplicationAction<TState>` and implement all of the update logic in the `call` method. Since the method returns a `Stream`, a convenient way to implement the logic is often by using `async *` generators which allows to `yield` a sequence of state updates.
+
+```dart
+class RefreshAction extends ApplicationAction<MyApp> {
+  const RefreshAction();
+
+  @override
+  Stream<ApplicationStateUpdater<CounterState>> call(
+    ApplicationContext<CounterState> context,
+  ) async* {
+    if(!context.state.isLoading) {
+        yield (state) => state.copyWith(
+            isLoading: true,
+        );
+
+        final news = await Api.instance.getNews();
+
+        yield (state) => state.copyWith(
+            isLoading: false,
+            news: news,
+        );
+    }
+  }
+}
+```
+
+> Note that the action aren't yielding states directly, but `ApplicationStateUpdater`s. This is insists on the fact the the initial state may have changed during the action execution, and must be taken into account when updated.
+
 
 ### Logger
 
