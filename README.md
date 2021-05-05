@@ -43,6 +43,26 @@ class ResetAction extends ApplicationAction<CounterState> {
   }
 }
 
+class SaveAction extends ApplicationAction<CounterState> {
+  @override
+  Stream<ApplicationStateUpdater<CounterState>> call(
+    ApplicationContext<CounterState> context,
+  ) async* {
+    await File(_cachePath).writeAsString(context.state.count.toString());
+  }
+}
+
+class LoadAction extends ApplicationAction<CounterState> {
+  @override
+  Stream<ApplicationStateUpdater<CounterState>> call(
+    ApplicationContext<CounterState> context,
+  ) async* {
+    final content await File(_cachePath).readAsString();
+    final count = int.parse(content);
+    yield (state) => CounterState(min(count, state.max), state.max);
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
