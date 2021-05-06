@@ -1,3 +1,6 @@
+[Inglês](../../README.md) | Portuguese
+
+
 ![logo](https://github.com/aloisdeniel/fountain/raw/main/images/logo.png)
 
 A solução de gerenciamento de estado modular para o Flutter.
