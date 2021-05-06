@@ -6,7 +6,7 @@ import 'package:fountain/middlewares.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CounterStateStorage extends Storage<CounterState> {
+class CounterStateStorage extends StateStorage<CounterState> {
   Future<File> getFile() async {
     final documents = await getApplicationDocumentsDirectory();
     return File(join(documents.path, 'cache'));
@@ -31,5 +31,11 @@ class CounterStateStorage extends Storage<CounterState> {
       'max': state.max,
     });
     await file.writeAsString(json);
+  }
+
+  @override
+  Future<void> clear() async {
+    final file = await getFile();
+    await file.delete();
   }
 }
