@@ -1,4 +1,4 @@
-[Inglês](../../README.md) | Portuguese
+[Inglês](../../README.md) | Português
 
 
 ![logo](https://github.com/aloisdeniel/fountain/raw/main/images/logo.png)
