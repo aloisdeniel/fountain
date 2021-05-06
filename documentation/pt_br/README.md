@@ -142,3 +142,80 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
+## Conceitos principais
+
+![schema](https://github.com/aloisdeniel/fountain/raw/main/images/schema.png)
+
+### ApplicationContext<State>
+
+O contexto da aplicação mantém um único estado global logico e imutável para a aplicação.
+
+O contexto também contém todos os middlewares que irão processar os eventos disparados.
+
+O contexto da aplicação é provido a árvore de widget através de um `ApplicationProvider`, dessa forma, qualquer widget descendente pode observar as propriedades do estado usando o método de extensão `select`. Ele também pode disparar eventos para os middlewares usando o método de extensão `dispatch`.
+
+### ApplicationMiddleware
+
+O middleware de aplicação processa os `ApplicationEvent`s (eventos da aplicação) e pode produzir atualizações do estado.
+
+Eles são combináveis por natureza, o que significa que cada middleware pode conter outro middleware.
+
+### ApplicationEvent
+
+Os eventos são entradas para os middlewares. Eles podem descrever uma ação do usuário, ou um evento do sistema por exemplo. Os eventos são processados pelos middlewares que podem produzir novos estados da aplicação.
+
+## Middlewares inclusos
+
+### Ações
+
+Por padrão, o framework incluí um middleware `ApplicationActionExecutor` que permite definir `ApplicationAction`s (ações da aplicação) que depois são diretamente invocados para produzir novos estados.
+
+#### Definindo uma ação
+
+Para criar uma ação customizada, herde de `ApplicationAction<TState>` e implemente toda a logica de atualizações no método `call`. Já que o método retorna uma `Stream`, uma maneira conveniente de implementar a lógica é comumente usando geradores assíncronos (`async*`) que permite produzir (`yield`) uma sequência de atualizações do estado.
+
+```dart
+class RefreshAction extends ApplicationAction<MyApp> {
+  const RefreshAction();
+
+  @override
+  Stream<ApplicationStateUpdater<CounterState>> call(
+    ApplicationContext<CounterState> context,
+  ) async* {
+    if(!context.state.isLoading) {
+        yield (state) => state.copyWith(
+            isLoading: true,
+        );
+
+        final news = await Api.instance.getNews();
+
+        yield (state) => state.copyWith(
+            isLoading: false,
+            news: news,
+        );
+    }
+  }
+}
+```
+
+> Observe que a ação não está produzindo estados diretamente, mas sim `estados de atualização da aplicação (ApplicationStateUpdater)`. Isso implica no fato de que o estado inicial pode ter mudado durante a execução da ação, e deve ser levado em consideração quando atualizado.
+
+### Logger
+
+O framework também incluí um middleware `ApplicationLogger` que registra todas as ações e atualizações de estado.
+
+## Sobre
+
+### Espera ... mais uma solução de gerenciamento de estado para o Flutter?
+
+Fountain não é tão novo para mim, Eu venho usando essa abordagem por muito tempo. Centralizá-lo como uma biblioteca de código aberto (opensource), faz muito sentido para criar um padrão para todos meus projetos pessoais e profissionais.
+
+### Inspirado por
+
+Esse projeto está sobre o ombro de gigantes, coma intenção de reduzir boilerplate, sendo minimalista e simples em sua essência.
+
+- [Redux](https://pub.dev/packages/redux) por sua atualização funcional e princípios em geral, com o proposito de ter menos boilerplate por ser um pouco mais opinativo.
+- [Express](https://expressjs.com/) | [Koa](https://koajs.com/) por sua composição e modularidade graças aos middlewares.
+- [Bloc](https://pub.dev/packages/bloc) por seu uso das Streams.
+- [Provider](https://pub.dev/documentation/provider/latest/provider/SelectContext.html) por seu método `select`.
