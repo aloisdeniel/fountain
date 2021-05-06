@@ -219,3 +219,9 @@ Esse projeto está sobre o ombro de gigantes, coma intenção de reduzir boilerp
 - [Express](https://expressjs.com/) | [Koa](https://koajs.com/) por sua composição e modularidade graças aos middlewares.
 - [Bloc](https://pub.dev/packages/bloc) por seu uso das Streams.
 - [Provider](https://pub.dev/documentation/provider/latest/provider/SelectContext.html) por seu método `select`.
+
+### Como o Fountain é diferente de outras soluções populares?
+
+- [Provider](https://pub.dev/packages/provider): Fountain é mais opinativo que o Provider, sendo que o Provider é mais uma ferramenta de uso geral. O Provider é normalmente usado em conjunto com o `ChangeNotifier` para criar uma solução simples de gerenciamento de estado.
+- [Redux](https://pub.dev/packages/flutter_redux): Fountain tem a mesma filosofia geral que o Redux com `Thunks`, mas traz menos boilerplate ao lidar com lógicas assíncronas através de `ApplicationAction (ações)` que fazem o uso de `Stream (fluxo de dados)`. Fountain também traz o conceito de middleware.
+- [Bloc](https://pub.dev/packages/flutter_bloc): Fountain usa um estado global ao invés de vários `Blocs (componentes de regra de negócio)`. Nós acreditamos que isso é importante já que tem muitas partes que precisam conhecer outras partes da lógica do seu aplicativo. Isso também torna mais fácil de lidar com a persistência de dados e a testabilidade.
