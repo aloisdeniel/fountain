@@ -20,7 +20,7 @@ class EventMerger<TState> extends ApplicationMiddleware<TState> {
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
     if (eventTypes.contains(event.runtimeType)) {
@@ -48,6 +48,6 @@ class EventMerger<TState> extends ApplicationMiddleware<TState> {
 
 class EventProcessing<TState> {
   const EventProcessing(this.event, this.updates);
-  final ApplicationEvent<TState> event;
+  final ApplicationEvent event;
   final Stream<TState> updates;
 }

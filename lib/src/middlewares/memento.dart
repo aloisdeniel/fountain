@@ -15,7 +15,7 @@ class Memento<TState> extends ApplicationMiddleware<TState> {
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
     if (event is Undo<TState>) {
@@ -30,4 +30,4 @@ class Memento<TState> extends ApplicationMiddleware<TState> {
   }
 }
 
-class Undo<TState> extends ApplicationEvent<TState> {}
+class Undo<TState> extends ApplicationEvent {}

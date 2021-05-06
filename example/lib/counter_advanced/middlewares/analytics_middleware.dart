@@ -15,7 +15,7 @@ class Analytics extends ApplicationMiddleware<CounterState> {
   @override
   Stream<CounterState> call(
     ApplicationContext<CounterState> context,
-    ApplicationEvent<CounterState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<CounterState> next,
   ) async* {
     await for (final state in next(context, event)) {

@@ -40,7 +40,7 @@ class ApplicationContext<TState> extends ChangeNotifier {
     return _controller.stream.map((state) => selector(state)).distinct();
   }
 
-  Future<void> dispatch(ApplicationEvent<TState> event) {
+  Future<void> dispatch(ApplicationEvent event) {
     ApplicationNextMiddleware<TState> next =
         (notifier, event) => Stream<TState>.empty();
     for (var middleware in middlewares.reversed) {

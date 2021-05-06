@@ -7,12 +7,12 @@ enum Mock {
   inBetween,
 }
 
-class SetMock extends ApplicationEvent<CounterState> {
+class SetMock extends ApplicationEvent {
   SetMock(this.mock);
   final Mock mock;
 }
 
-class EnableMock extends ApplicationEvent<CounterState> {
+class EnableMock extends ApplicationEvent {
   const EnableMock(this.isEnabled);
   final bool isEnabled;
 }
@@ -41,7 +41,7 @@ class Mocking extends ApplicationMiddleware<CounterState> {
   @override
   Stream<CounterState> call(
     ApplicationContext<CounterState> context,
-    ApplicationEvent<CounterState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<CounterState> next,
   ) async* {
     if (event is EnableMock) {

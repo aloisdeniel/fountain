@@ -11,6 +11,6 @@ extension BuildContextFountainExtensions on BuildContext {
   Stream<T> listen<TState, T>(Selector<TState, T> selector) =>
       ApplicationContext.of<TState>(this).listen(selector);
 
-  Future<void> dispatch<TState>(ApplicationEvent<TState> event) =>
+  Future<void> dispatch<TState>(ApplicationEvent event) =>
       ApplicationContext.of<TState>(this).dispatch(event);
 }

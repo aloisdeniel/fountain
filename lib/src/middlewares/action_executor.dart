@@ -18,7 +18,7 @@ typedef ApplicationStateUpdater<TState> = TState Function(TState state);
 /// See also :
 /// * [ApplicationActionExecutor<TState>] which is the middleware that process actions.
 /// * [ApplicationContext<TState>] which is the root context used by an action.
-abstract class ApplicationAction<TState> extends ApplicationEvent<TState> {
+abstract class ApplicationAction<TState> extends ApplicationEvent {
   /// Creates a new action.
   const ApplicationAction();
 
@@ -149,7 +149,7 @@ class ApplicationActionExecutor<TState> extends ApplicationMiddleware<TState> {
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
     if (event is ApplicationAction<TState>) {

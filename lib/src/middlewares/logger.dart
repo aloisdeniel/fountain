@@ -19,7 +19,7 @@ class ApplicationLogger<TState> extends ApplicationMiddleware<TState> {
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
     final logger = this.logger ?? Logger.root;

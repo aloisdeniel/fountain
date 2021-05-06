@@ -5,12 +5,12 @@ abstract class ApplicationMiddleware<TState> {
   const ApplicationMiddleware();
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   );
 }
 
 typedef Stream<TState> ApplicationNextMiddleware<TState>(
   ApplicationContext<TState> context,
-  ApplicationEvent<TState> event,
+  ApplicationEvent event,
 );

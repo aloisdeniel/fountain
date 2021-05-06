@@ -17,7 +17,7 @@ class ErrorHandler<TState> extends ApplicationMiddleware<TState> {
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
-    ApplicationEvent<TState> event,
+    ApplicationEvent event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
     final initialState = context.state;
@@ -44,9 +44,9 @@ class ErrorHandler<TState> extends ApplicationMiddleware<TState> {
 /// An [error] occured while dispatching the [event].
 ///
 /// The [initialState] is the state before the execution.
-typedef ApplicationEvent<TState> OnDispatchFailed<TState>(
+typedef ApplicationEvent OnDispatchFailed<TState>(
   ApplicationContext<TState> context,
-  ApplicationEvent<TState> event,
+  ApplicationEvent event,
   TState initialState,
   dynamic error,
   StackTrace stackTrace,

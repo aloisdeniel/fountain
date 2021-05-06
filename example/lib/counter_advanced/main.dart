@@ -24,6 +24,23 @@ class MyApp extends StatelessWidget {
     return ApplicationProvider(
       initialState: (context) => CounterState.initial(),
       middlewares: <ApplicationMiddleware<CounterState>>[
+        ErrorHandler<CounterState>(
+            (appContext, event, initialState, error, st) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text("Error"),
+              content: Text("And unexpected error occured and $event failed"),
+              actions: [
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          );
+          return ApplicationEvent.empty;
+        }),
         ApplicationLogger<CounterState>(),
         Analytics(),
         Mocking(),
