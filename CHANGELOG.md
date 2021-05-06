@@ -1,3 +1,7 @@
+## [0.1.4-beta] 
+
+* Fixed mistakes in documentation.
+
 ## [0.1.3-beta] 
 
 * Improved actions documentation.

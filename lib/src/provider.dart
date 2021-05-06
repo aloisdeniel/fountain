@@ -54,6 +54,7 @@ class ApplicationProviderState<TState>
   void initState() {
     _lastState = applicationContext.state;
     applicationContext.addListener(_onStateUpdate);
+    applicationContext.dispatch(InitApplicationEvent<TState>());
     super.initState();
   }
 
@@ -108,3 +109,6 @@ class ApplicationStateInheritedProvider extends InheritedModel<Selector> {
     );
   }
 }
+
+/// An event that is dispatched right after initialization.
+class InitApplicationEvent<TState> extends ApplicationEvent<TState> {}

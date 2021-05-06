@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'middlewares/analytics_middleware.dart';
 import 'middlewares/mock_middleware.dart';
 import 'state/state.dart';
+import 'state/storage.dart';
 import 'view/home.dart';
 
 void main() {
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ApplicationLogger<CounterState>(),
         Analytics(),
         Mocking(),
+        Persistence(
+          storage: CounterStateStorage(),
+        ),
         ...ApplicationProvider.defaultMiddlewares<CounterState>(),
       ],
       child: MaterialApp(

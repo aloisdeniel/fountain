@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fountain/fountain.dart';
 import 'package:fountain/src/event.dart';
 
 import '../context.dart';
@@ -7,21 +8,19 @@ import '../context.dart';
 import 'middleware.dart';
 
 class Persistence<TState> extends ApplicationMiddleware<TState> {
-  Persistence({
+  const Persistence({
     required this.storage,
   });
 
   final Storage<TState> storage;
-  bool _isLoaded = false;
   @override
   Stream<TState> call(
     ApplicationContext<TState> context,
     ApplicationEvent<TState> event,
     ApplicationNextMiddleware<TState> next,
   ) async* {
-    if (!_isLoaded) {
+    if (event is InitApplicationEvent<TState>) {
       final loadedState = await storage.load();
-      _isLoaded = true;
       if (loadedState != null) {
         yield loadedState;
       }

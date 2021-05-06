@@ -167,6 +167,8 @@ The events are inputs for middlewares. They can describe a user action, or a sys
 
 ## Included middlewares
 
+To import middlewares, use the `import 'package:fountain/middlewares.dart';` directive.
+
 ### Actions
 
 By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationAction`s which are then invoked directly to produce new states.
@@ -201,10 +203,38 @@ class RefreshAction extends ApplicationAction<MyApp> {
 
 > Note that the actions aren't yielding states directly, but `ApplicationStateUpdater`s. This is to insist on the fact the the initial state may have changed during the action execution, and therefore, it must be taken into account when updated.
 
-
 ### Logger
 
-The framework also includes an `ApplicationLogger` middleware that logs all actions and state updates.
+The framework also includes an `ApplicationLogger` middleware that logs all events and state updates.
+
+```dart
+ApplicationProvider(
+    middlewares: <ApplicationMiddleware<CounterState>>[
+        ApplicationLogger<CounterState>(),
+        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
+    ],
+    // ...
+);
+```
+
+### ErrorHandler
+
+This middleware catches all unmanaged exceptions from middlewares below it and dispatches new events if so.
+
+```dart
+ApplicationProvider(
+    middlewares: <ApplicationMiddleware<CounterState>>[
+        ErrorHandler<CounterState>(
+            (context, event, initialState,error,stackTrace) {
+                // An unknow error occured during event processing
+                return DisplayAlertAction('Sorry, an error occured');
+            },
+        ),
+        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
+    ],
+    // ...
+);
+```
 
 ##  About
 
