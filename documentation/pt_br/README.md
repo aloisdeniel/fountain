@@ -157,23 +157,23 @@ O contexto da aplicação é provido a árvore de widget através de um `Applica
 
 ### ApplicationMiddleware
 
-O middleware de aplicação processa os `ApplicationEvent`s (eventos da aplicação) e pode produzir atualizações do estado.
+O middleware de aplicação processa os `eventos da aplicação (ApplicationEvent)` e pode produzir atualizações do estado.
 
 Eles são combináveis por natureza, o que significa que cada middleware pode conter outro middleware.
 
 ### ApplicationEvent
 
-Os eventos são entradas para os middlewares. Eles podem descrever uma ação do usuário, ou um evento do sistema por exemplo. Os eventos são processados pelos middlewares que podem produzir novos estados da aplicação.
+Os eventos são entradas para os middlewares. Eles podem descrever uma ação do usuário, ou um evento do sistema por exemplo. Os eventos são processados pelos middlewares, que podem produzir novos estados da aplicação.
 
 ## Middlewares inclusos
 
 ### Ações
 
-Por padrão, o framework incluí um middleware `ApplicationActionExecutor` que permite definir `ApplicationAction`s (ações da aplicação) que depois são diretamente invocados para produzir novos estados.
+Por padrão, o framework incluí um middleware `ApplicationActionExecutor` que permite definir `ações da aplicação (ApplicationAction)` e que depois são diretamente invocados para produzir novos estados.
 
 #### Definindo uma ação
 
-Para criar uma ação customizada, herde de `ApplicationAction<TState>` e implemente toda a logica de atualizações no método `call`. Já que o método retorna uma `Stream`, uma maneira conveniente de implementar a lógica é comumente usando geradores assíncronos (`async*`) que permite produzir (`yield`) uma sequência de atualizações do estado.
+Para criar uma ação customizada, herde de `ApplicationAction<TState>` e implemente toda a logica de atualizações no método `call`. Já que o método retorna uma `Stream`, uma maneira conveniente de implementar a lógica é comumente usando geradores assíncronos (`async*`), que permitem produzir (`yield`) uma sequência de atualizações do estado.
 
 ```dart
 class RefreshAction extends ApplicationAction<MyApp> {
@@ -199,23 +199,23 @@ class RefreshAction extends ApplicationAction<MyApp> {
 }
 ```
 
-> Observe que a ação não está produzindo estados diretamente, mas sim `estados de atualização da aplicação (ApplicationStateUpdater)`. Isso implica no fato de que o estado inicial pode ter mudado durante a execução da ação, e deve ser levado em consideração quando atualizado.
+> Observe que a ação não está produzindo estados diretamente, mas sim `atualizadores de estado da aplicação (ApplicationStateUpdater)`. Isso implica no fato de que o estado inicial pode ter mudado durante a execução da ação, e deve ser levado em consideração quando atualizado.
 
 ### Logger
 
-O framework também incluí um middleware `ApplicationLogger` que registra todas as ações e atualizações de estado.
+O framework também incluí um middleware `ApplicationLogger`, que registra todas as ações e atualizações de estado.
 
 ## Sobre
 
-### Espera ... mais uma solução de gerenciamento de estado para o Flutter?
+### Espera... mais uma solução de gerenciamento de estado para o Flutter?
 
-Fountain não é tão novo para mim, Eu venho usando essa abordagem por muito tempo. Centralizá-lo como uma biblioteca de código aberto (opensource), faz muito sentido para criar um padrão para todos meus projetos pessoais e profissionais.
+Fountain não é tão novo para mim, Eu venho usando essa abordagem por muito tempo. Centralizá-lo como uma biblioteca de código aberto (opensource), faz muito sentido pois cria um padrão para todos meus projetos pessoais e profissionais.
 
 ### Inspirado por
 
-Esse projeto está sobre o ombro de gigantes, coma intenção de reduzir boilerplate, sendo minimalista e simples em sua essência.
+Esse projeto está construído sobre o ombro de gigantes, com a intenção de reduzir boilerplate, sendo minimalista e simples em sua essência.
 
-- [Redux](https://pub.dev/packages/redux) por sua atualização funcional e princípios em geral, com o proposito de ter menos boilerplate por ser um pouco mais opinativo.
+- [Redux](https://pub.dev/packages/redux) por sua atualização funcional e princípios em geral, com o proposito de ter menos boilerplate, por ser um pouco mais opinativo.
 - [Express](https://expressjs.com/) | [Koa](https://koajs.com/) por sua composição e modularidade graças aos middlewares.
 - [Bloc](https://pub.dev/packages/bloc) por seu uso das Streams.
 - [Provider](https://pub.dev/documentation/provider/latest/provider/SelectContext.html) por seu método `select`.
