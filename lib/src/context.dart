@@ -5,6 +5,7 @@ import 'event.dart';
 import 'middlewares/middleware.dart';
 
 import 'provider.dart';
+import 'service_locator.dart';
 
 /// A [ChangeNotifier] that owns the global [state] of the application.
 ///
@@ -18,7 +19,15 @@ class ApplicationContext<TState> extends ChangeNotifier {
   ApplicationContext({
     required TState initialState,
     required this.middlewares,
-  }) : _state = initialState;
+    List<Service> services = const <Service>[],
+  })  : _state = initialState,
+        assert(
+          services.any(
+            (x) => x.stateType == TState,
+          ),
+          'Registered services must be have a TState type of $TState',
+        ),
+        _services = services;
 
   TState _state;
   final StreamController<TState> _controller =
@@ -26,7 +35,9 @@ class ApplicationContext<TState> extends ChangeNotifier {
 
   TState get state => _state;
 
+  final List<Service> _services;
   final List<ApplicationMiddleware<TState>> middlewares;
+  late final ServiceLocator services = ServiceLocator(this, _services);
 
   @protected
   set state(TState state) {
@@ -38,6 +49,10 @@ class ApplicationContext<TState> extends ChangeNotifier {
 
   Stream<T> listen<T>(T Function(TState state) selector) {
     return _controller.stream.map((state) => selector(state)).distinct();
+  }
+
+  Future<bool> until<T>(bool Function(TState state) predicate) {
+    return _controller.stream.any(predicate);
   }
 
   Future<void> dispatch(ApplicationEvent event) {

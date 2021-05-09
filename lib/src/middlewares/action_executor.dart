@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
 import '../event.dart';
@@ -21,6 +22,9 @@ typedef ApplicationStateUpdater<TState> = TState Function(TState state);
 abstract class ApplicationAction<TState> extends ApplicationEvent {
   /// Creates a new action.
   const ApplicationAction();
+
+  dynamic throwNotExecutable() =>
+      throw ApplicationActionNotExecutableException();
 
   /// Creates a new action from a [call] function.
   ///
@@ -173,4 +177,9 @@ class ApplicationActionExecutor<TState> extends ApplicationMiddleware<TState> {
       yield event;
     }
   }
+}
+
+extension BuildContextActionsExtensions on BuildContext {
+  bool canExecute<TState>(ApplicationAction<TState> action) =>
+      action.canExecute(ApplicationContext.of<TState>(this).state);
 }

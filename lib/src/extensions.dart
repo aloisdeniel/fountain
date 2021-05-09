@@ -3,6 +3,7 @@ import 'package:fountain/src/event.dart';
 import 'package:fountain/src/provider.dart';
 
 import 'context.dart';
+import 'dispatcher.dart';
 
 extension BuildContextFountainExtensions on BuildContext {
   T select<TState, T>(Selector<TState, T> selector) =>
@@ -12,5 +13,5 @@ extension BuildContextFountainExtensions on BuildContext {
       ApplicationContext.of<TState>(this).listen(selector);
 
   Future<void> dispatch<TState>(ApplicationEvent event) =>
-      ApplicationContext.of<TState>(this).dispatch(event);
+      Dispatcher.of<TState>(this)(event);
 }

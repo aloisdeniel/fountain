@@ -4,6 +4,8 @@ import 'package:fountain/src/middlewares/action_executor.dart';
 
 import '../fountain.dart';
 import 'context.dart';
+import 'dispatcher.dart';
+import 'service_locator.dart';
 
 typedef TState StateInitializer<TState>(BuildContext context);
 
@@ -12,11 +14,13 @@ class ApplicationProvider<TState> extends StatefulWidget {
     Key? key,
     required this.initialState,
     required this.child,
+    this.services,
     this.middlewares,
   }) : super(key: key);
 
   final StateInitializer<TState> initialState;
   final List<ApplicationMiddleware<TState>>? middlewares;
+  final List<Service>? services;
   final Widget child;
 
   static List<ApplicationMiddleware<TState>> defaultMiddlewares<TState>() => [
@@ -44,6 +48,7 @@ class ApplicationProviderState<TState>
   late ApplicationContext<TState> applicationContext =
       ApplicationContext<TState>(
     initialState: widget.initialState(context),
+    services: widget.services ?? const <Service>[],
     middlewares:
         widget.middlewares ?? ApplicationProvider.defaultMiddlewares<TState>(),
   );
@@ -73,16 +78,20 @@ class ApplicationProviderState<TState>
 
   @override
   Widget build(BuildContext context) {
-    return ApplicationStateInheritedProvider(
-      state: applicationContext.state,
-      child: widget.child,
+    return Dispatcher<TState>(
+      dispatch: (event) => applicationContext.dispatch(event),
+      child: ApplicationStateInheritedProvider<TState>(
+        state: applicationContext.state,
+        child: widget.child,
+      ),
     );
   }
 }
 
 typedef T Selector<TState, T>(TState state);
 
-class ApplicationStateInheritedProvider extends InheritedModel<Selector> {
+class ApplicationStateInheritedProvider<TState>
+    extends InheritedModel<Selector> {
   const ApplicationStateInheritedProvider({
     Key? key,
     required this.state,
@@ -92,17 +101,17 @@ class ApplicationStateInheritedProvider extends InheritedModel<Selector> {
           child: child,
         );
 
-  final dynamic state;
+  final TState state;
 
   @override
   bool updateShouldNotify(
-      covariant ApplicationStateInheritedProvider oldWidget) {
+      covariant ApplicationStateInheritedProvider<TState> oldWidget) {
     return state != oldWidget.state;
   }
 
   @override
   bool updateShouldNotifyDependent(
-      covariant ApplicationStateInheritedProvider oldWidget,
+      covariant ApplicationStateInheritedProvider<TState> oldWidget,
       Set<Selector> dependencies) {
     return dependencies.any(
       (selector) => selector(oldWidget.state) != selector(state),

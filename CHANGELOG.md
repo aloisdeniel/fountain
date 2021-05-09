@@ -1,3 +1,10 @@
+## [0.2.0-beta] 
+
+* Added `services` service locator to `ApplicationContext`
+* Added `ProxyState`.
+* Basis for a real world `documents` example.
+
+
 ## [0.1.4-beta] 
 
 * Fixed mistakes in documentation.
