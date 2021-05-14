@@ -5,9 +5,9 @@ import '../event.dart';
 import 'middleware.dart';
 import '../context.dart';
 
-class ApplicationActionNotExecutableException implements Exception {}
+class ActionNotExecutableException implements Exception {}
 
-typedef ApplicationStateUpdater<TState> = TState Function(TState state);
+typedef Updater<TState> = TState Function(TState state);
 
 /// An action is a portion of logic that will alterate the current
 /// state of the application.
@@ -19,30 +19,29 @@ typedef ApplicationStateUpdater<TState> = TState Function(TState state);
 /// See also :
 /// * [ApplicationActionExecutor<TState>] which is the middleware that process actions.
 /// * [ApplicationContext<TState>] which is the root context used by an action.
-abstract class ApplicationAction<TState> extends ApplicationEvent {
+abstract class Action<TState> extends Event {
   /// Creates a new action.
-  const ApplicationAction();
+  const Action();
 
-  dynamic throwNotExecutable() =>
-      throw ApplicationActionNotExecutableException();
+  dynamic throwNotExecutable() => throw ActionNotExecutableException();
 
   /// Creates a new action from a [call] function.
   ///
   /// The [id] identifies this particular action type.
   ///
   /// Inheriting from [ApplicationAction] is another way to define an action.
-  const factory ApplicationAction.function(
+  const factory Action.function(
     String id,
     ApplicationFunctionCall<TState> call, {
     ApplicationFunctionCanExecute<TState>? canExecute,
     ApplicationFunctionFailed<TState>? failed,
-  }) = FunctionApplicationAction;
+  }) = FunctionAction;
 
   /// An action execution will update the [context]'s state by producing a stream of updates.
   ///
   /// The easier way to implement such a method is by using `async *` generators.
-  Stream<ApplicationStateUpdater<TState>> call(
-    ApplicationContext<TState> context,
+  Stream<Updater<TState>> call(
+    Context<TState> context,
   );
 
   /// If the execution failed because of the given [error] and [stackTrace], then this method
@@ -51,22 +50,22 @@ abstract class ApplicationAction<TState> extends ApplicationEvent {
   ///
   /// By default, nothing is executed in case of a failure, but the `Logger.root` prints a
   /// message.
-  Stream<ApplicationStateUpdater<TState>> failed(
-    ApplicationContext<TState> context,
+  Stream<Updater<TState>> failed(
+    Context<TState> context,
     TState initialState,
     dynamic error,
     StackTrace stackTrace,
   ) =>
       defaultFailed<TState>(context, initialState, error, stackTrace);
 
-  static Stream<ApplicationStateUpdater<TState>> defaultFailed<TState>(
-    ApplicationContext<TState> context,
+  static Stream<Updater<TState>> defaultFailed<TState>(
+    Context<TState> context,
     TState initialState,
     dynamic error,
     StackTrace stackTrace,
   ) {
     Logger.root.severe('An action failed', error, stackTrace);
-    return Stream<ApplicationStateUpdater<TState>>.empty();
+    return Stream<Updater<TState>>.empty();
   }
 
   /// Allows to block execution if the state isn't valid.
@@ -77,13 +76,12 @@ abstract class ApplicationAction<TState> extends ApplicationEvent {
   static bool defaultCanExecute<TState>(TState state) => true;
 }
 
-typedef Stream<ApplicationStateUpdater<TState>> ApplicationFunctionCall<TState>(
-  ApplicationContext<TState> context,
+typedef Stream<Updater<TState>> ApplicationFunctionCall<TState>(
+  Context<TState> context,
 );
 
-typedef Stream<ApplicationStateUpdater<TState>> ApplicationFunctionFailed<
-    TState>(
-  ApplicationContext<TState> context,
+typedef Stream<Updater<TState>> ApplicationFunctionFailed<TState>(
+  Context<TState> context,
   TState initialState,
   dynamic error,
   StackTrace stackTrace,
@@ -91,9 +89,9 @@ typedef Stream<ApplicationStateUpdater<TState>> ApplicationFunctionFailed<
 
 typedef bool ApplicationFunctionCanExecute<TState>(TState state);
 
-class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
+class FunctionAction<TState> extends Action<TState> {
   /// Creates a new action.
-  const FunctionApplicationAction(
+  const FunctionAction(
     this.id,
     this._call, {
     ApplicationFunctionCanExecute<TState>? canExecute,
@@ -107,20 +105,20 @@ class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
   final ApplicationFunctionFailed<TState>? _failed;
 
   @override
-  Stream<ApplicationStateUpdater<TState>> call(
-    ApplicationContext<TState> context,
+  Stream<Updater<TState>> call(
+    Context<TState> context,
   ) =>
       _call(context);
 
   @override
-  Stream<ApplicationStateUpdater<TState>> failed(
-    ApplicationContext<TState> context,
+  Stream<Updater<TState>> failed(
+    Context<TState> context,
     TState initialState,
     dynamic error,
     StackTrace stackTrace,
   ) {
     if (_failed == null) {
-      return ApplicationAction.defaultFailed<TState>(
+      return Action.defaultFailed<TState>(
         context,
         initialState,
         error,
@@ -133,7 +131,7 @@ class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
   @override
   bool canExecute(TState state) {
     if (_failed == null) {
-      return ApplicationAction.defaultCanExecute<TState>(state);
+      return Action.defaultCanExecute<TState>(state);
     }
     return _canExecute!(state);
   }
@@ -148,20 +146,20 @@ class FunctionApplicationAction<TState> extends ApplicationAction<TState> {
 ///
 /// See also :
 /// * [ApplicationAction<TState>] which is the base class for actions processed by this middleware.
-class ApplicationActionExecutor<TState> extends ApplicationMiddleware<TState> {
-  const ApplicationActionExecutor();
+class ActionExecutor<TState> extends Middleware<TState> {
+  const ActionExecutor();
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
-    if (event is ApplicationAction<TState>) {
+    if (event is Action<TState>) {
       final action = event;
       final initialState = context.state;
       try {
         if (!action.canExecute(context.state)) {
-          throw ApplicationActionNotExecutableException();
+          throw ActionNotExecutableException();
         }
         await for (final event in action(context)) {
           yield event(context.state);
@@ -180,6 +178,6 @@ class ApplicationActionExecutor<TState> extends ApplicationMiddleware<TState> {
 }
 
 extension BuildContextActionsExtensions on BuildContext {
-  bool canExecute<TState>(ApplicationAction<TState> action) =>
-      action.canExecute(ApplicationContext.of<TState>(this).state);
+  bool canExecute<TState>(Action<TState> action) =>
+      action.canExecute(Context.of<TState>(this).state);
 }

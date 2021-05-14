@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'event.dart';
 import 'middlewares/middleware.dart';
 
-import 'provider.dart';
+import 'fountain.dart';
 import 'service_locator.dart';
 
 /// A [ChangeNotifier] that owns the global [state] of the application.
@@ -15,8 +15,8 @@ import 'service_locator.dart';
 ///
 /// See also :
 ///  * [ApplicationAction] which updates the state of the application.
-class ApplicationContext<TState> extends ChangeNotifier {
-  ApplicationContext({
+class Context<TState> extends ChangeNotifier {
+  Context({
     required TState initialState,
     required this.middlewares,
     List<Service> services = const <Service>[],
@@ -36,7 +36,7 @@ class ApplicationContext<TState> extends ChangeNotifier {
   TState get state => _state;
 
   final List<Service> _services;
-  final List<ApplicationMiddleware<TState>> middlewares;
+  final List<Middleware<TState>> middlewares;
   late final ServiceLocator services = ServiceLocator(this, _services);
 
   @protected
@@ -55,11 +55,10 @@ class ApplicationContext<TState> extends ChangeNotifier {
     return _controller.stream.any(predicate);
   }
 
-  Future<void> dispatch(ApplicationEvent event) {
-    ApplicationNextMiddleware<TState> next =
-        (notifier, event) => Stream<TState>.empty();
+  Future<void> dispatch(Event event) {
+    NextMiddleware<TState> next = (notifier, event) => Stream<TState>.empty();
     for (var middleware in middlewares.reversed) {
-      final ApplicationNextMiddleware<TState> previousNext = next;
+      final NextMiddleware<TState> previousNext = next;
       next = (context, event) => middleware(context, event, previousNext);
     }
 
@@ -72,9 +71,8 @@ class ApplicationContext<TState> extends ChangeNotifier {
     super.dispose();
   }
 
-  static ApplicationContext<TState> of<TState>(BuildContext context) {
-    final state =
-        context.findAncestorStateOfType<ApplicationProviderState<TState>>();
+  static Context<TState> of<TState>(BuildContext context) {
+    final state = context.findAncestorStateOfType<FountainState<TState>>();
     return state!.applicationContext;
   }
 }

@@ -7,15 +7,14 @@ import 'package:fountain/middlewares.dart';
 
 /// Downloads documents from the server.
 class OpenDocumentsAction
-    extends ApplicationAction<ApplicationInitializedStateAuthenticated> {
+    extends Action<ApplicationInitializedStateAuthenticated> {
   const OpenDocumentsAction(this.id);
 
   final String id;
 
   @override
-  Stream<ApplicationStateUpdater<ApplicationInitializedStateAuthenticated>>
-      call(
-    ApplicationContext<ApplicationInitializedStateAuthenticated> context,
+  Stream<Updater<ApplicationInitializedStateAuthenticated>> call(
+    Context<ApplicationInitializedStateAuthenticated> context,
   ) async* {
     // If thee list of documents has not been loaded yet, we will first load
     // it.

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:fountain/fountain.dart';
 
-typedef Future<void> Dispatch(ApplicationEvent event);
+typedef Future<void> Dispatch(Event event);
 
 class Dispatcher<TState> extends InheritedWidget {
   const Dispatcher({

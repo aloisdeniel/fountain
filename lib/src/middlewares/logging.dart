@@ -5,8 +5,8 @@ import '../context.dart';
 
 import 'middleware.dart';
 
-class ApplicationLogger<TState> extends ApplicationMiddleware<TState> {
-  const ApplicationLogger({
+class Logging<TState> extends Middleware<TState> {
+  const Logging({
     this.logger,
     this.logState = false,
   });
@@ -18,9 +18,9 @@ class ApplicationLogger<TState> extends ApplicationMiddleware<TState> {
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     final logger = this.logger ?? Logger.root;
     final executionId = _uniqueId++;

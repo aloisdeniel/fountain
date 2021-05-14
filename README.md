@@ -23,39 +23,39 @@ class CounterState {
 The available actions that alterate the logical state of the application :
 
 ```dart
-class AddAction extends ApplicationAction<CounterState> {
+class AddAction extends Action<CounterState> {
   const AddAction(this.value);
   final int value;
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     yield (state) => CounterState(min(state.count + value, state.max), state.max);
   }
 }
 
-class ResetAction extends ApplicationAction<CounterState> {
+class ResetAction extends Action<CounterState> {
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     yield (state) => CounterState(0, state.max);
   }
 }
 
-class SaveAction extends ApplicationAction<CounterState> {
+class SaveAction extends Action<CounterState> {
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     await File(_cachePath).writeAsString(context.state.count.toString());
   }
 }
 
-class LoadAction extends ApplicationAction<CounterState> {
+class LoadAction extends Action<CounterState> {
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     final content = await File(_cachePath).readAsString();
     final count = int.parse(content);
@@ -123,13 +123,13 @@ class MyHomePage extends StatelessWidget {
 }
 ```
 
-The state initialization :
+The state initialization at the root of the tree with the `Fountain` widget :
 
 ```dart
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ApplicationProvider(
+    return Fountain(
       initialState: (context) => CounterState.initial(),
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -147,21 +147,21 @@ class MyApp extends StatelessWidget {
 
 ![schema](https://github.com/aloisdeniel/fountain/raw/main/images/schema.png)
 
-### ApplicationContext<State>
+### Context<State>
 
 The application context maintains a unique global logical immutable state for the application.
 
 The context also contains all the middlewares that will process the dispatched event.
 
-The application context is provided to the widget tree from an `ApplicationProvider` so that any descendent widget can observe a property of the state with the `select` extension method. It can also dispatch events into the middlewares with the `dispatch` extension methods.
+The application context is provided to the widget tree from a `Fountain` so that any descendent widget can observe a property of the state with the `select` extension method. It can also dispatch events into the middlewares with the `dispatch` extension methods.
 
-### ApplicationMiddleware
+### Middleware
 
-The application middleware process the dispatched `ApplicationEvent`s and can produce state updates.
+The application middleware process the dispatched `Event`s and can produce state updates.
 
 They are composable by nature which means that each middleware can wrap another middleware.
 
-### ApplicationEvent
+### Event
 
 The events are inputs for middlewares. They can describe a user action, or a system event for exemple. They are processed by the middlewares which can produce new application states.
 
@@ -171,19 +171,19 @@ To import middlewares, use the `import 'package:fountain/middlewares.dart';` dir
 
 ### Actions
 
-By default, the framework includes a `ApplicationActionExecutor` middleware that allows to define `ApplicationAction`s which are then invoked directly to produce new states.
+By default, the framework includes a `ActionExecutor<TState>` middleware that allows to define `Action<TState>`s which are then invoked directly to produce new states.
 
 #### Defining an action 
 
-To create custom actions, inherits from `ApplicationAction<TState>` and implement all of the update logic in the `call` method. Since the method returns a `Stream`, a convenient way to implement the logic is often by using `async *` generators which allows to `yield` a sequence of state updates.
+To create custom actions, inherits from `Action<TState>` and implement all of the update logic in the `call` method. Since the method returns a `Stream`, a convenient way to implement the logic is often by using `async *` generators which allows to `yield` a sequence of state updates.
 
 ```dart
-class RefreshAction extends ApplicationAction<MyApp> {
+class RefreshAction extends Action<MyApp> {
   const RefreshAction();
 
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     if(!context.state.isLoading) {
         yield (state) => state.copyWith(
@@ -201,17 +201,17 @@ class RefreshAction extends ApplicationAction<MyApp> {
 }
 ```
 
-> Note that the actions aren't yielding states directly, but `ApplicationStateUpdater`s. This is to insist on the fact the the initial state may have changed during the action execution, and therefore, it must be taken into account when updated.
+> Note that the actions aren't yielding states directly, but `Updater`s. This is to insist on the fact the the initial state may have changed during the action execution, and therefore, it must be taken into account when updated.
 
-### Logger
+### Logging
 
-The framework also includes an `ApplicationLogger` middleware that logs all events and state updates.
+The framework also includes a `Logging` middleware that logs all events and state updates.
 
 ```dart
-ApplicationProvider(
-    middlewares: <ApplicationMiddleware<CounterState>>[
-        ApplicationLogger<CounterState>(),
-        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
+Fountain(
+    middlewares: <Middleware<CounterState>>[
+        Logging<CounterState>(),
+        ...Fountain.defaultMiddlewares<CounterState>(),
     ],
     // ...
 );
@@ -222,15 +222,15 @@ ApplicationProvider(
 This middleware catches all unmanaged exceptions from middlewares below it and dispatches new events if so.
 
 ```dart
-ApplicationProvider(
-    middlewares: <ApplicationMiddleware<CounterState>>[
+Fountain(
+    middlewares: <Middleware<CounterState>>[
         ErrorHandler<CounterState>(
             (context, event, initialState,error,stackTrace) {
                 // An unknow error occured during event processing
                 return DisplayAlertAction('Sorry, an error occured');
             },
         ),
-        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
+        ...Fountain.defaultMiddlewares<CounterState>(),
     ],
     // ...
 );

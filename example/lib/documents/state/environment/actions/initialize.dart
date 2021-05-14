@@ -8,7 +8,7 @@ import 'package:fountain/fountain.dart';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
 
-class InitializeEnvironmentAction extends ApplicationAction<ApplicationState> {
+class InitializeEnvironmentAction extends Action<ApplicationState> {
   const InitializeEnvironmentAction.mock()
       : this.environment = Environment.mock;
 
@@ -18,8 +18,8 @@ class InitializeEnvironmentAction extends ApplicationAction<ApplicationState> {
   final Environment environment;
 
   @override
-  Stream<ApplicationStateUpdater<ApplicationState>> call(
-    ApplicationContext<ApplicationState> context,
+  Stream<Updater<ApplicationState>> call(
+    Context<ApplicationState> context,
   ) async* {
     // From package info
     final packageInfo = await PackageInfo.fromPlatform();

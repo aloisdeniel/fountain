@@ -1,3 +1,12 @@
+## [0.3.0-beta] 
+
+* Renamed `ApplicationContext` to `Context`.
+* Renamed `ApplicationMiddleware` to `Middleware`.
+* Renamed `ApplicationEvent` to `Event`.
+* Renamed `ApplicationProvider` to `Fountain`.
+* Renamed `ApplicationAction` to `Action`.
+* Renamed `ApplicationLogger` to `Logging`.
+
 ## [0.2.1-beta] 
 
 * Fixed issue with service types and provider.

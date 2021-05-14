@@ -8,11 +8,11 @@ import '../context.dart';
 
 import 'middleware.dart';
 
-class ClearPersistence extends ApplicationEvent {
+class ClearPersistence extends Event {
   const ClearPersistence();
 }
 
-class Persistence<TState> extends ApplicationMiddleware<TState> {
+class Persistence<TState> extends Middleware<TState> {
   Persistence({
     required this.storage,
     Duration debouncing = const Duration(seconds: 1),
@@ -26,9 +26,9 @@ class Persistence<TState> extends ApplicationMiddleware<TState> {
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     if (event is InitApplicationEvent) {
       final loadedState = await storage.load();

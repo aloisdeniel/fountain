@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:fountain/src/event.dart';
-import 'package:fountain/src/middlewares/action_executor.dart';
+import 'package:fountain/src/middlewares/action_executor.dart' as actions;
 import 'package:fountain/src/middlewares/middleware.dart';
 import 'package:fountain/src/service_locator.dart';
 
 import 'context.dart';
 import 'dispatcher.dart';
-import 'provider.dart';
+import 'fountain.dart';
 
 class ProxyAccessor<TState, TChild> {
   const ProxyAccessor({
@@ -36,10 +36,10 @@ class StateProxy<TState, TChild> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final childContext = ProxyApplicationContext<TState, TChild>(
-      parent: ApplicationContext.of<TState>(context),
+      parent: Context.of<TState>(context),
       accessor: accessor,
     );
-    final substate = ApplicationProvider.select<TState, TChild>(
+    final substate = Fountain.select<TState, TChild>(
         context, (state) => accessor.getter(state));
     return Dispatcher<TChild>(
       dispatch: (event) => childContext.dispatch(event),
@@ -51,14 +51,13 @@ class StateProxy<TState, TChild> extends StatelessWidget {
   }
 }
 
-class ProxyApplicationContext<TState, TChild>
-    implements ApplicationContext<TChild> {
+class ProxyApplicationContext<TState, TChild> implements Context<TChild> {
   const ProxyApplicationContext({
     required this.parent,
     required this.accessor,
   });
 
-  final ApplicationContext<TState> parent;
+  final Context<TState> parent;
   final ProxyAccessor<TState, TChild> accessor;
 
   @override
@@ -67,9 +66,8 @@ class ProxyApplicationContext<TState, TChild>
   @override
   set state(TChild state) => throw Exception('Invalid');
 
-  ApplicationAction<TState> _createParentAction(
-      ApplicationAction<TChild> action) {
-    return ApplicationAction<TState>.function(
+  actions.Action<TState> _createParentAction(actions.Action<TChild> action) {
+    return actions.Action<TState>.function(
       'Proxy[$TState~$TChild]:$action',
       (context) => action(this).map(
         (childState) => (parentState) => accessor.setter(
@@ -102,9 +100,9 @@ class ProxyApplicationContext<TState, TChild>
   }
 
   @override
-  Future<void> dispatch(ApplicationEvent event) {
+  Future<void> dispatch(Event event) {
     final action = event;
-    if (action is ApplicationAction<TChild>) {
+    if (action is actions.Action<TChild>) {
       event = _createParentAction(action);
     }
     return parent.dispatch(event);
@@ -132,7 +130,7 @@ class ProxyApplicationContext<TState, TChild>
   }
 
   @override
-  List<ApplicationMiddleware<TChild>> get middlewares => [];
+  List<Middleware<TChild>> get middlewares => [];
 
   @override
   void notifyListeners() {

@@ -1,45 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fountain/fountain.dart';
-import 'package:fountain/middlewares.dart';
+
+import 'state.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class CounterState {
-  factory CounterState.initial() => const CounterState(0);
-  const CounterState(this.count);
-  final int count;
-}
-
-class AddAction extends ApplicationAction<CounterState> {
-  const AddAction(this.value);
-
-  final int value;
-
-  @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
-  ) async* {
-    yield (state) => CounterState(state.count + value);
-  }
-}
-
-class ResetAction extends ApplicationAction<CounterState> {
-  const ResetAction();
-
-  @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
-  ) async* {
-    yield (state) => CounterState.initial();
-  }
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ApplicationProvider(
+    return Fountain(
       initialState: (context) => CounterState.initial(),
       child: MaterialApp(
         title: 'Flutter Demo',

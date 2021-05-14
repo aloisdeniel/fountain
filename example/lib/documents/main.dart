@@ -40,7 +40,7 @@ Service<ApplicationState, TService> environmentService<TService>({
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ApplicationProvider(
+    return Fountain(
       initialState: (context) => ApplicationState.notInitialized(),
       services: [
         environmentService<AuthenticationApi>(
@@ -57,8 +57,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       middlewares: [
-        ApplicationLogger<ApplicationState>(),
-        ...ApplicationProvider.defaultMiddlewares<ApplicationState>(),
+        Logging<ApplicationState>(),
+        ...Fountain.defaultMiddlewares<ApplicationState>(),
       ],
       child: MaterialApp(
         theme: ThemeData(

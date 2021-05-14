@@ -8,7 +8,7 @@ class ServiceLocator<TState> {
     this.services,
   );
 
-  final ApplicationContext<TState> _context;
+  final Context<TState> _context;
   final List<Service> services;
 
   /// Create a [Service] instance for the current state.
@@ -39,10 +39,10 @@ class Service<TState, TService> {
   Type get stateType => TState;
   Type get serviceType => TService;
 
-  TService call(ApplicationContext<TState> context) => builder(context);
+  TService call(Context<TState> context) => builder(context);
 }
 
 /// Instanciates a service for the current [context].
 typedef ServiceBuilder<TState, TService> = TService Function(
-  ApplicationContext<TState> context,
+  Context<TState> context,
 );

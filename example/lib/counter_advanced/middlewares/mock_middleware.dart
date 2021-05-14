@@ -7,18 +7,18 @@ enum Mock {
   inBetween,
 }
 
-class SetMock extends ApplicationEvent {
+class SetMock extends Event {
   SetMock(this.mock);
   final Mock mock;
 }
 
-class EnableMock extends ApplicationEvent {
+class EnableMock extends Event {
   const EnableMock(this.isEnabled);
   final bool isEnabled;
 }
 
 /// This is an example middleware that force state of the app from the given [Mock].
-class Mocking extends ApplicationMiddleware<CounterState> {
+class Mocking extends Middleware<CounterState> {
   Mocking({
     this.isEnabled = false,
     this.mock = Mock.min,
@@ -40,9 +40,9 @@ class Mocking extends ApplicationMiddleware<CounterState> {
 
   @override
   Stream<CounterState> call(
-    ApplicationContext<CounterState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<CounterState> next,
+    Context<CounterState> context,
+    Event event,
+    NextMiddleware<CounterState> next,
   ) async* {
     if (event is EnableMock) {
       isEnabled = event.isEnabled;

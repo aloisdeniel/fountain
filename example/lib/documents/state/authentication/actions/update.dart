@@ -3,7 +3,7 @@ import 'package:example/documents/state/form/state.dart';
 import 'package:fountain/fountain.dart';
 
 /// Update the current credentials.
-class UpdateCredentialsAction extends ApplicationAction<AuthenticationState> {
+class UpdateCredentialsAction extends Action<AuthenticationState> {
   const UpdateCredentialsAction({
     this.username,
     this.password,
@@ -13,8 +13,8 @@ class UpdateCredentialsAction extends ApplicationAction<AuthenticationState> {
   final String? password;
 
   @override
-  Stream<ApplicationStateUpdater<AuthenticationState>> call(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> call(
+    Context<AuthenticationState> context,
   ) async* {
     if (username != null || password != null) {
       yield (state) => state.maybeMap(

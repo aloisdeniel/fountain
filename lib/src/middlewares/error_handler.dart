@@ -7,7 +7,7 @@ import 'middleware.dart';
 
 /// This middleware catches all exceptions from middlewares below it and dispatches
 /// a new event from its [onFailed] callback if so.
-class ErrorHandler<TState> extends ApplicationMiddleware<TState> {
+class ErrorHandler<TState> extends Middleware<TState> {
   const ErrorHandler(this.onFailed);
 
   /// Called whenever an [error] occurs while dispatching an [event] to
@@ -16,9 +16,9 @@ class ErrorHandler<TState> extends ApplicationMiddleware<TState> {
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     final initialState = context.state;
     try {
@@ -44,9 +44,9 @@ class ErrorHandler<TState> extends ApplicationMiddleware<TState> {
 /// An [error] occured while dispatching the [event].
 ///
 /// The [initialState] is the state before the execution.
-typedef ApplicationEvent OnDispatchFailed<TState>(
-  ApplicationContext<TState> context,
-  ApplicationEvent event,
+typedef Event OnDispatchFailed<TState>(
+  Context<TState> context,
+  Event event,
   TState initialState,
   dynamic error,
   StackTrace stackTrace,

@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:example/counter_advanced/state/state.dart';
 import 'package:fountain/fountain.dart';
 
-class AddAction extends ApplicationAction<CounterState> {
+class AddAction extends Action<CounterState> {
   const AddAction(this.value);
 
   final int value;
 
   @override
-  Stream<ApplicationStateUpdater<CounterState>> call(
-    ApplicationContext<CounterState> context,
+  Stream<Updater<CounterState>> call(
+    Context<CounterState> context,
   ) async* {
     yield (state) => CounterState(
           min(state.count + value, state.max),
@@ -23,7 +23,7 @@ class AddAction extends ApplicationAction<CounterState> {
 }
 
 /// A function can also be used when no argument is required.
-final resetAction = ApplicationAction<CounterState>.function(
+final resetAction = Action<CounterState>.function(
   'Reset',
   (context) async* {
     yield (state) => CounterState(0, state.max);

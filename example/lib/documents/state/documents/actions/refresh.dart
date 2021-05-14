@@ -6,13 +6,12 @@ import 'package:fountain/middlewares.dart';
 
 /// Downloads documents from the server.
 class RefreshDocumentsAction
-    extends ApplicationAction<ApplicationInitializedStateAuthenticated> {
+    extends Action<ApplicationInitializedStateAuthenticated> {
   const RefreshDocumentsAction();
 
   @override
-  Stream<ApplicationStateUpdater<ApplicationInitializedStateAuthenticated>>
-      call(
-    ApplicationContext<ApplicationInitializedStateAuthenticated> context,
+  Stream<Updater<ApplicationInitializedStateAuthenticated>> call(
+    Context<ApplicationInitializedStateAuthenticated> context,
   ) {
     return context.state.documents.maybeMap(
       loading: (loading) => throwNotExecutable(),

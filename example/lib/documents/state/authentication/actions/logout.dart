@@ -2,12 +2,12 @@ import 'package:example/documents/services/api.dart';
 import 'package:example/documents/state/authentication/state.dart';
 import 'package:fountain/fountain.dart';
 
-class LogoutAction extends ApplicationAction<AuthenticationState> {
+class LogoutAction extends Action<AuthenticationState> {
   const LogoutAction();
 
   @override
-  Stream<ApplicationStateUpdater<AuthenticationState>> call(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> call(
+    Context<AuthenticationState> context,
   ) {
     return context.state.maybeMap(
       authenticated: (authenticated) async* {

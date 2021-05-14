@@ -3,12 +3,12 @@ import 'package:example/documents/state/form/state.dart';
 import 'package:fountain/fountain.dart';
 
 /// If not authenticated, and no authentication process started, then starts the authentication process.
-class StartAuthenticationAction extends ApplicationAction<AuthenticationState> {
+class StartAuthenticationAction extends Action<AuthenticationState> {
   const StartAuthenticationAction();
 
   @override
-  Stream<ApplicationStateUpdater<AuthenticationState>> call(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> call(
+    Context<AuthenticationState> context,
   ) async* {
     yield (state) => state.maybeMap(
           notAuthenticated: (_) => AuthenticationState.enterCredentials(

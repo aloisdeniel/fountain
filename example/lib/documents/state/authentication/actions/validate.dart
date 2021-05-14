@@ -4,11 +4,10 @@ import 'package:example/documents/state/documents/actions/refresh.dart';
 import 'package:example/documents/state/form/state.dart';
 import 'package:fountain/fountain.dart';
 
-class ValidateAuthenticationAction
-    extends ApplicationAction<AuthenticationState> {
+class ValidateAuthenticationAction extends Action<AuthenticationState> {
   const ValidateAuthenticationAction();
 
-  Stream<ApplicationStateUpdater<AuthenticationState>> _notValid(
+  Stream<Updater<AuthenticationState>> _notValid(
     AuthenticationStateEnterCredentials enterCredentials,
   ) async* {
     yield (state) => AuthenticationState.invalidCredentials(
@@ -18,8 +17,8 @@ class ValidateAuthenticationAction
         );
   }
 
-  Stream<ApplicationStateUpdater<AuthenticationState>> _authenticate(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> _authenticate(
+    Context<AuthenticationState> context,
     AuthenticationStateEnterCredentials enterCredentials,
   ) async* {
     yield (state) => AuthenticationState.authenticating(
@@ -43,8 +42,8 @@ class ValidateAuthenticationAction
   }
 
   @override
-  Stream<ApplicationStateUpdater<AuthenticationState>> call(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> call(
+    Context<AuthenticationState> context,
   ) {
     return context.state.maybeMap(
       enterCredentials: (enterCredentials) {

@@ -4,13 +4,12 @@ import 'package:example/documents/state/state.dart';
 import 'package:fountain/fountain.dart';
 import 'package:fountain/middlewares.dart';
 
-class CloseDocumentsAction
-    extends ApplicationAction<ApplicationInitializedState> {
+class CloseDocumentsAction extends Action<ApplicationInitializedState> {
   const CloseDocumentsAction();
 
   @override
-  Stream<ApplicationStateUpdater<ApplicationInitializedState>> call(
-    ApplicationContext<ApplicationInitializedState> context,
+  Stream<Updater<ApplicationInitializedState>> call(
+    Context<ApplicationInitializedState> context,
   ) {
     return context.state.maybeMap(
       authenticated: (authenticated) => authenticated.documents.maybeMap(

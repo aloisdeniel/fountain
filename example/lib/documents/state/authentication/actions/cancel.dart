@@ -2,13 +2,12 @@ import 'package:example/documents/state/authentication/state.dart';
 import 'package:fountain/fountain.dart';
 
 /// Cancels the current authentication
-class CancelAuthenticationAction
-    extends ApplicationAction<AuthenticationState> {
+class CancelAuthenticationAction extends Action<AuthenticationState> {
   const CancelAuthenticationAction();
 
   @override
-  Stream<ApplicationStateUpdater<AuthenticationState>> call(
-    ApplicationContext<AuthenticationState> context,
+  Stream<Updater<AuthenticationState>> call(
+    Context<AuthenticationState> context,
   ) async* {
     yield (state) => AuthenticationState.notAuthenticated();
   }

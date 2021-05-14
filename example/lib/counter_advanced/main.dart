@@ -21,9 +21,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ApplicationProvider(
+    return Fountain(
       initialState: (context) => CounterState.initial(),
-      middlewares: <ApplicationMiddleware<CounterState>>[
+      middlewares: <Middleware<CounterState>>[
         ErrorHandler<CounterState>(
             (appContext, event, initialState, error, st) {
           showDialog(
@@ -39,15 +39,15 @@ class MyApp extends StatelessWidget {
               ],
             ),
           );
-          return ApplicationEvent.empty;
+          return Event.empty;
         }),
-        ApplicationLogger<CounterState>(),
+        Logging<CounterState>(),
         Analytics(),
         Mocking(),
         Persistence(
           storage: CounterStateStorage(),
         ),
-        ...ApplicationProvider.defaultMiddlewares<CounterState>(),
+        ...Fountain.defaultMiddlewares<CounterState>(),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

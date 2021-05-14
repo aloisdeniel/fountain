@@ -9,8 +9,8 @@ import 'service_locator.dart';
 
 typedef TState StateInitializer<TState>(BuildContext context);
 
-class ApplicationProvider<TState> extends StatefulWidget {
-  const ApplicationProvider({
+class Fountain<TState> extends StatefulWidget {
+  const Fountain({
     Key? key,
     required this.initialState,
     required this.child,
@@ -19,12 +19,12 @@ class ApplicationProvider<TState> extends StatefulWidget {
   }) : super(key: key);
 
   final StateInitializer<TState> initialState;
-  final List<ApplicationMiddleware<TState>>? middlewares;
+  final List<Middleware<TState>>? middlewares;
   final List<Service>? services;
   final Widget child;
 
-  static List<ApplicationMiddleware<TState>> defaultMiddlewares<TState>() => [
-        ApplicationActionExecutor<TState>(),
+  static List<Middleware<TState>> defaultMiddlewares<TState>() => [
+        ActionExecutor<TState>(),
       ];
 
   static T select<TState, T>(
@@ -39,18 +39,14 @@ class ApplicationProvider<TState> extends StatefulWidget {
   }
 
   @override
-  ApplicationProviderState<TState> createState() =>
-      ApplicationProviderState<TState>();
+  FountainState<TState> createState() => FountainState<TState>();
 }
 
-class ApplicationProviderState<TState>
-    extends widgets.State<ApplicationProvider<TState>> {
-  late ApplicationContext<TState> applicationContext =
-      ApplicationContext<TState>(
+class FountainState<TState> extends widgets.State<Fountain<TState>> {
+  late Context<TState> applicationContext = Context<TState>(
     initialState: widget.initialState(context),
     services: widget.services ?? const <Service>[],
-    middlewares:
-        widget.middlewares ?? ApplicationProvider.defaultMiddlewares<TState>(),
+    middlewares: widget.middlewares ?? Fountain.defaultMiddlewares<TState>(),
   );
 
   late TState _lastState;

@@ -7,7 +7,7 @@ import '../context.dart';
 import 'middleware.dart';
 
 /// Ignore duplicated concurent events.
-class EventMerger<TState> extends ApplicationMiddleware<TState> {
+class EventMerger<TState> extends Middleware<TState> {
   EventMerger({
     required this.eventTypes,
   });
@@ -19,9 +19,9 @@ class EventMerger<TState> extends ApplicationMiddleware<TState> {
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     if (eventTypes.contains(event.runtimeType)) {
       final existing =
@@ -48,6 +48,6 @@ class EventMerger<TState> extends ApplicationMiddleware<TState> {
 
 class EventProcessing<TState> {
   const EventProcessing(this.event, this.updates);
-  final ApplicationEvent event;
+  final Event event;
   final Stream<TState> updates;
 }

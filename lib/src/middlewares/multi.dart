@@ -12,22 +12,22 @@ enum MultiEventMode {
   parralel,
 }
 
-class MultiEvent<TState> extends ApplicationEvent {
+class MultiEvent<TState> extends Event {
   const MultiEvent.queue(this.events) : this.mode = MultiEventMode.queue;
   const MultiEvent.parralel(this.events) : this.mode = MultiEventMode.queue;
   final MultiEventMode mode;
-  final List<ApplicationEvent> events;
+  final List<Event> events;
 }
 
 /// This middleware allows to dispatch a set of events.
-class Multi<TState> extends ApplicationMiddleware<TState> {
+class Multi<TState> extends Middleware<TState> {
   const Multi();
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     if (event is MultiEvent<TState>) {
       if (event.mode == MultiEventMode.queue) {

@@ -4,7 +4,7 @@ import '../context.dart';
 
 import 'middleware.dart';
 
-class Memento<TState> extends ApplicationMiddleware<TState> {
+class Memento<TState> extends Middleware<TState> {
   Memento({
     this.historySize = 50,
   });
@@ -14,9 +14,9 @@ class Memento<TState> extends ApplicationMiddleware<TState> {
 
   @override
   Stream<TState> call(
-    ApplicationContext<TState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<TState> next,
+    Context<TState> context,
+    Event event,
+    NextMiddleware<TState> next,
   ) async* {
     if (event is Undo<TState>) {
       history.removeLast();
@@ -30,4 +30,4 @@ class Memento<TState> extends ApplicationMiddleware<TState> {
   }
 }
 
-class Undo<TState> extends ApplicationEvent {}
+class Undo<TState> extends Event {}

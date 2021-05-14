@@ -4,7 +4,7 @@ import 'package:fountain/fountain.dart';
 import 'package:fountain/middlewares.dart';
 
 /// This is an example middleware that logs actions to a a virtual analytics provider.
-class Analytics extends ApplicationMiddleware<CounterState> {
+class Analytics extends Middleware<CounterState> {
   const Analytics();
 
   void log(String eventName, Map<String, String> arguments) {
@@ -14,9 +14,9 @@ class Analytics extends ApplicationMiddleware<CounterState> {
 
   @override
   Stream<CounterState> call(
-    ApplicationContext<CounterState> context,
-    ApplicationEvent event,
-    ApplicationNextMiddleware<CounterState> next,
+    Context<CounterState> context,
+    Event event,
+    NextMiddleware<CounterState> next,
   ) async* {
     await for (final state in next(context, event)) {
       yield state;
@@ -24,7 +24,7 @@ class Analytics extends ApplicationMiddleware<CounterState> {
         log('add', {
           'newCount': state.count.toString(),
         });
-      } else if (event is FunctionApplicationAction<CounterState>) {
+      } else if (event is FunctionAction<CounterState>) {
         log(event.id, {});
       }
     }
