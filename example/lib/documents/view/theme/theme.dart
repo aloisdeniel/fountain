@@ -30,6 +30,7 @@ class AppTheme extends StatelessWidget {
         edgeInsets: edgeInsets[adaptative.layout]!,
         textStyle: textStyles[adaptative.layout]!,
         borderRadius: borderRadius[adaptative.layout]!,
+        border: borders[adaptative.layout]!,
         durations: durations,
       ),
     );

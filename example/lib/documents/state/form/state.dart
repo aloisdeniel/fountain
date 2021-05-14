@@ -12,6 +12,10 @@ enum FormInvalidReason {
   invalidFields,
 }
 
+/// Represents the state of a form field of [T] type.
+///
+/// The field can be validated, and if [notValid] a reason of [TInvalidReason] type can
+/// be precvised.
 @freezed
 class FieldState<T, TInvalidReason> with _$FieldState {
   const FieldState._();

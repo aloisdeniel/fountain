@@ -1,9 +1,12 @@
+## [0.2.1-beta] 
+
+* Fixed issue with service types and provider.
+
 ## [0.2.0-beta] 
 
 * Added `services` service locator to `ApplicationContext`
 * Added `ProxyState`.
 * Basis for a real world `documents` example.
-
 
 ## [0.1.4-beta] 
 

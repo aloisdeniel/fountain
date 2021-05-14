@@ -12,6 +12,7 @@ class AppThemeData with _$AppThemeData {
     required AppThemeEdgeInsetsData edgeInsets,
     required AppThemeTextStylesData textStyle,
     required AppThemeBorderRadiusData borderRadius,
+    required AppThemeBorderData border,
     required AppThemeDurationsData durations,
   }) = _AppThemeData;
 
@@ -31,6 +32,13 @@ class AppThemeColorData with _$AppThemeColorData {
     required Color shadow,
     required Color accentGlow,
   }) = _AppThemeColorData;
+}
+
+@freezed
+class AppThemeBorderData with _$AppThemeBorderData {
+  const factory AppThemeBorderData({
+    required BorderSide small,
+  }) = _AppThemeBorderData;
 }
 
 @freezed

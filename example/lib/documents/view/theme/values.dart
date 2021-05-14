@@ -66,6 +66,15 @@ const borderRadius = <AdaptativeLayout, AppThemeBorderRadiusData>{
   ),
 };
 
+const borders = <AdaptativeLayout, AppThemeBorderData>{
+  AdaptativeLayout.small: AppThemeBorderData(
+    small: BorderSide(width: 1),
+  ),
+  AdaptativeLayout.large: AppThemeBorderData(
+    small: BorderSide(width: 1),
+  ),
+};
+
 final textStyles = <AdaptativeLayout, AppThemeTextStylesData>{
   AdaptativeLayout.small: AppThemeTextStylesData(
     title: GoogleFonts.inter(

@@ -31,7 +31,7 @@ class ApplicationProvider<TState> extends StatefulWidget {
       BuildContext context, Selector<TState, T> selector) {
     final Selector untypedSelector = (state) => selector(state);
     final provider =
-        InheritedModel.inheritFrom<ApplicationStateInheritedProvider>(
+        InheritedModel.inheritFrom<ApplicationStateInheritedProvider<TState>>(
       context,
       aspect: untypedSelector,
     );

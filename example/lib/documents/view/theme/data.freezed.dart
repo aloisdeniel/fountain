@@ -21,12 +21,14 @@ class _$AppThemeDataTearOff {
       required AppThemeEdgeInsetsData edgeInsets,
       required AppThemeTextStylesData textStyle,
       required AppThemeBorderRadiusData borderRadius,
+      required AppThemeBorderData border,
       required AppThemeDurationsData durations}) {
     return _AppThemeData(
       color: color,
       edgeInsets: edgeInsets,
       textStyle: textStyle,
       borderRadius: borderRadius,
+      border: border,
       durations: durations,
     );
   }
@@ -42,6 +44,7 @@ mixin _$AppThemeData {
   AppThemeTextStylesData get textStyle => throw _privateConstructorUsedError;
   AppThemeBorderRadiusData get borderRadius =>
       throw _privateConstructorUsedError;
+  AppThemeBorderData get border => throw _privateConstructorUsedError;
   AppThemeDurationsData get durations => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -59,12 +62,14 @@ abstract class $AppThemeDataCopyWith<$Res> {
       AppThemeEdgeInsetsData edgeInsets,
       AppThemeTextStylesData textStyle,
       AppThemeBorderRadiusData borderRadius,
+      AppThemeBorderData border,
       AppThemeDurationsData durations});
 
   $AppThemeColorDataCopyWith<$Res> get color;
   $AppThemeEdgeInsetsDataCopyWith<$Res> get edgeInsets;
   $AppThemeTextStylesDataCopyWith<$Res> get textStyle;
   $AppThemeBorderRadiusDataCopyWith<$Res> get borderRadius;
+  $AppThemeBorderDataCopyWith<$Res> get border;
   $AppThemeDurationsDataCopyWith<$Res> get durations;
 }
 
@@ -82,6 +87,7 @@ class _$AppThemeDataCopyWithImpl<$Res> implements $AppThemeDataCopyWith<$Res> {
     Object? edgeInsets = freezed,
     Object? textStyle = freezed,
     Object? borderRadius = freezed,
+    Object? border = freezed,
     Object? durations = freezed,
   }) {
     return _then(_value.copyWith(
@@ -101,6 +107,10 @@ class _$AppThemeDataCopyWithImpl<$Res> implements $AppThemeDataCopyWith<$Res> {
           ? _value.borderRadius
           : borderRadius // ignore: cast_nullable_to_non_nullable
               as AppThemeBorderRadiusData,
+      border: border == freezed
+          ? _value.border
+          : border // ignore: cast_nullable_to_non_nullable
+              as AppThemeBorderData,
       durations: durations == freezed
           ? _value.durations
           : durations // ignore: cast_nullable_to_non_nullable
@@ -138,6 +148,13 @@ class _$AppThemeDataCopyWithImpl<$Res> implements $AppThemeDataCopyWith<$Res> {
   }
 
   @override
+  $AppThemeBorderDataCopyWith<$Res> get border {
+    return $AppThemeBorderDataCopyWith<$Res>(_value.border, (value) {
+      return _then(_value.copyWith(border: value));
+    });
+  }
+
+  @override
   $AppThemeDurationsDataCopyWith<$Res> get durations {
     return $AppThemeDurationsDataCopyWith<$Res>(_value.durations, (value) {
       return _then(_value.copyWith(durations: value));
@@ -157,6 +174,7 @@ abstract class _$AppThemeDataCopyWith<$Res>
       AppThemeEdgeInsetsData edgeInsets,
       AppThemeTextStylesData textStyle,
       AppThemeBorderRadiusData borderRadius,
+      AppThemeBorderData border,
       AppThemeDurationsData durations});
 
   @override
@@ -167,6 +185,8 @@ abstract class _$AppThemeDataCopyWith<$Res>
   $AppThemeTextStylesDataCopyWith<$Res> get textStyle;
   @override
   $AppThemeBorderRadiusDataCopyWith<$Res> get borderRadius;
+  @override
+  $AppThemeBorderDataCopyWith<$Res> get border;
   @override
   $AppThemeDurationsDataCopyWith<$Res> get durations;
 }
@@ -187,6 +207,7 @@ class __$AppThemeDataCopyWithImpl<$Res> extends _$AppThemeDataCopyWithImpl<$Res>
     Object? edgeInsets = freezed,
     Object? textStyle = freezed,
     Object? borderRadius = freezed,
+    Object? border = freezed,
     Object? durations = freezed,
   }) {
     return _then(_AppThemeData(
@@ -206,6 +227,10 @@ class __$AppThemeDataCopyWithImpl<$Res> extends _$AppThemeDataCopyWithImpl<$Res>
           ? _value.borderRadius
           : borderRadius // ignore: cast_nullable_to_non_nullable
               as AppThemeBorderRadiusData,
+      border: border == freezed
+          ? _value.border
+          : border // ignore: cast_nullable_to_non_nullable
+              as AppThemeBorderData,
       durations: durations == freezed
           ? _value.durations
           : durations // ignore: cast_nullable_to_non_nullable
@@ -222,6 +247,7 @@ class _$_AppThemeData extends _AppThemeData {
       required this.edgeInsets,
       required this.textStyle,
       required this.borderRadius,
+      required this.border,
       required this.durations})
       : super._();
 
@@ -234,11 +260,13 @@ class _$_AppThemeData extends _AppThemeData {
   @override
   final AppThemeBorderRadiusData borderRadius;
   @override
+  final AppThemeBorderData border;
+  @override
   final AppThemeDurationsData durations;
 
   @override
   String toString() {
-    return 'AppThemeData(color: $color, edgeInsets: $edgeInsets, textStyle: $textStyle, borderRadius: $borderRadius, durations: $durations)';
+    return 'AppThemeData(color: $color, edgeInsets: $edgeInsets, textStyle: $textStyle, borderRadius: $borderRadius, border: $border, durations: $durations)';
   }
 
   @override
@@ -256,6 +284,8 @@ class _$_AppThemeData extends _AppThemeData {
             (identical(other.borderRadius, borderRadius) ||
                 const DeepCollectionEquality()
                     .equals(other.borderRadius, borderRadius)) &&
+            (identical(other.border, border) ||
+                const DeepCollectionEquality().equals(other.border, border)) &&
             (identical(other.durations, durations) ||
                 const DeepCollectionEquality()
                     .equals(other.durations, durations)));
@@ -268,6 +298,7 @@ class _$_AppThemeData extends _AppThemeData {
       const DeepCollectionEquality().hash(edgeInsets) ^
       const DeepCollectionEquality().hash(textStyle) ^
       const DeepCollectionEquality().hash(borderRadius) ^
+      const DeepCollectionEquality().hash(border) ^
       const DeepCollectionEquality().hash(durations);
 
   @JsonKey(ignore: true)
@@ -282,6 +313,7 @@ abstract class _AppThemeData extends AppThemeData {
       required AppThemeEdgeInsetsData edgeInsets,
       required AppThemeTextStylesData textStyle,
       required AppThemeBorderRadiusData borderRadius,
+      required AppThemeBorderData border,
       required AppThemeDurationsData durations}) = _$_AppThemeData;
   const _AppThemeData._() : super._();
 
@@ -294,6 +326,8 @@ abstract class _AppThemeData extends AppThemeData {
   @override
   AppThemeBorderRadiusData get borderRadius =>
       throw _privateConstructorUsedError;
+  @override
+  AppThemeBorderData get border => throw _privateConstructorUsedError;
   @override
   AppThemeDurationsData get durations => throw _privateConstructorUsedError;
   @override
@@ -633,6 +667,136 @@ abstract class _AppThemeColorData implements AppThemeColorData {
   @override
   @JsonKey(ignore: true)
   _$AppThemeColorDataCopyWith<_AppThemeColorData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+class _$AppThemeBorderDataTearOff {
+  const _$AppThemeBorderDataTearOff();
+
+  _AppThemeBorderData call({required BorderSide small}) {
+    return _AppThemeBorderData(
+      small: small,
+    );
+  }
+}
+
+/// @nodoc
+const $AppThemeBorderData = _$AppThemeBorderDataTearOff();
+
+/// @nodoc
+mixin _$AppThemeBorderData {
+  BorderSide get small => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $AppThemeBorderDataCopyWith<AppThemeBorderData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppThemeBorderDataCopyWith<$Res> {
+  factory $AppThemeBorderDataCopyWith(
+          AppThemeBorderData value, $Res Function(AppThemeBorderData) then) =
+      _$AppThemeBorderDataCopyWithImpl<$Res>;
+  $Res call({BorderSide small});
+}
+
+/// @nodoc
+class _$AppThemeBorderDataCopyWithImpl<$Res>
+    implements $AppThemeBorderDataCopyWith<$Res> {
+  _$AppThemeBorderDataCopyWithImpl(this._value, this._then);
+
+  final AppThemeBorderData _value;
+  // ignore: unused_field
+  final $Res Function(AppThemeBorderData) _then;
+
+  @override
+  $Res call({
+    Object? small = freezed,
+  }) {
+    return _then(_value.copyWith(
+      small: small == freezed
+          ? _value.small
+          : small // ignore: cast_nullable_to_non_nullable
+              as BorderSide,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$AppThemeBorderDataCopyWith<$Res>
+    implements $AppThemeBorderDataCopyWith<$Res> {
+  factory _$AppThemeBorderDataCopyWith(
+          _AppThemeBorderData value, $Res Function(_AppThemeBorderData) then) =
+      __$AppThemeBorderDataCopyWithImpl<$Res>;
+  @override
+  $Res call({BorderSide small});
+}
+
+/// @nodoc
+class __$AppThemeBorderDataCopyWithImpl<$Res>
+    extends _$AppThemeBorderDataCopyWithImpl<$Res>
+    implements _$AppThemeBorderDataCopyWith<$Res> {
+  __$AppThemeBorderDataCopyWithImpl(
+      _AppThemeBorderData _value, $Res Function(_AppThemeBorderData) _then)
+      : super(_value, (v) => _then(v as _AppThemeBorderData));
+
+  @override
+  _AppThemeBorderData get _value => super._value as _AppThemeBorderData;
+
+  @override
+  $Res call({
+    Object? small = freezed,
+  }) {
+    return _then(_AppThemeBorderData(
+      small: small == freezed
+          ? _value.small
+          : small // ignore: cast_nullable_to_non_nullable
+              as BorderSide,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_AppThemeBorderData implements _AppThemeBorderData {
+  const _$_AppThemeBorderData({required this.small});
+
+  @override
+  final BorderSide small;
+
+  @override
+  String toString() {
+    return 'AppThemeBorderData(small: $small)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _AppThemeBorderData &&
+            (identical(other.small, small) ||
+                const DeepCollectionEquality().equals(other.small, small)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(small);
+
+  @JsonKey(ignore: true)
+  @override
+  _$AppThemeBorderDataCopyWith<_AppThemeBorderData> get copyWith =>
+      __$AppThemeBorderDataCopyWithImpl<_AppThemeBorderData>(this, _$identity);
+}
+
+abstract class _AppThemeBorderData implements AppThemeBorderData {
+  const factory _AppThemeBorderData({required BorderSide small}) =
+      _$_AppThemeBorderData;
+
+  @override
+  BorderSide get small => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$AppThemeBorderDataCopyWith<_AppThemeBorderData> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

@@ -22,7 +22,7 @@ class ApplicationContext<TState> extends ChangeNotifier {
     List<Service> services = const <Service>[],
   })  : _state = initialState,
         assert(
-          services.any(
+          services.every(
             (x) => x.stateType == TState,
           ),
           'Registered services must be have a TState type of $TState',

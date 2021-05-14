@@ -5,10 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "example",
+            "name": "counter_basic (example)",
             "cwd": "example",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "APP=counter_basic"
+            ]
+        },
+        {
+            "name": "counter_advanced (example)",
+            "cwd": "example",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "APP=counter_advanced"
+            ]
+        },
+        {
+            "name": "documents (example)",
+            "cwd": "example",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "APP=documents"
+            ]
         }
     ]
 }
